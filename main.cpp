@@ -3,17 +3,12 @@
 #include <string>
 #include <iomanip>
 #include <algorithm>
+#include "function.h"
 
-struct Student {
-    std::string vardas;
-    std::string pavarde;
-    std::vector<int> namuDarbai;
-    int egz;
-};
 
 double Vidurkis(const std::vector<int>& pazymiai) {
     double suma = 0.0;
-    for (int pazymys : pazymiai) suma += pazymys;
+    for (int pazymys : pazymiai) suma = suma + pazymys;
     return suma / pazymiai.size();
 }
 
@@ -65,7 +60,7 @@ int main() {
         std::cout << "-----------------------------------------------------------"<<std::endl;
         std::cout << "Vardas     Pavarde       Galutunis (vid.)"<<std::endl;
         std::cout << "-----------------------------------------------------------"<<std::endl;
-            double Galutinis = Vidurkis(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
+        double Galutinis = Vidurkis(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
         double Galetunis_med = apskaiciuotiMediana(studentas.namuDarbai);
         std::cout << std::fixed << std::setprecision(2);
     
