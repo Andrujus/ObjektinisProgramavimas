@@ -1,8 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <iomanip>
-#include <algorithm>
+
 #include "function.h"
 
 
@@ -64,7 +60,7 @@ int main() {
         double Galetunis_med = apskaiciuotiMediana(studentas.namuDarbai);
         std::cout << std::fixed << std::setprecision(2);
     
-        std::cout<< studentas.vardas << "        " << studentas.pavarde << "       " << Galutinis;
+        std::cout<< studentas.vardas << std::setw(15) << studentas.pavarde << std::setw(15)  << Galutinis;
     }
     else
     {
@@ -76,7 +72,7 @@ int main() {
         double Galutinis_med = 0.4*mediana+0.6*studentas.egz;
         std::cout << std::fixed << std::setprecision(2);
     
-        std::cout<< studentas.vardas << "        " << studentas.pavarde << "       " << Galutinis_med;
+        std::cout<< studentas.vardas << std::setw(15) << studentas.pavarde << std::setw(15) << Galutinis_med;
     }
     
 
