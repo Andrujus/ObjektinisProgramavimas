@@ -18,7 +18,6 @@ double apskaiciuotiMediana(std::vector<int> pazymiai) {
     }
 }
 
-
 void Duom(Student& studentas) {
     std::cout << "Įveskite studento vardą: ";
     std::cin >> studentas.vardas;
@@ -57,7 +56,7 @@ int main() {
         std::cout << "Vardas     Pavarde       Galutunis (vid.)"<<std::endl;
         std::cout << "-----------------------------------------------------------"<<std::endl;
         double Galutinis = Vidurkis(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
-        double Galetunis_med = apskaiciuotiMediana(studentas.namuDarbai);
+
         std::cout << std::fixed << std::setprecision(2);
     
         std::cout<< studentas.vardas << std::setw(15) << studentas.pavarde << std::setw(15)  << Galutinis;
@@ -67,7 +66,6 @@ int main() {
         std::cout << "-----------------------------------------------------------"<<std::endl;
         std::cout << "Vardas    Pavarde      Galutunis (med.)"<<std::endl;
         std::cout << "-----------------------------------------------------------"<<std::endl;
-        double Galutinis = Vidurkis(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
         double mediana = apskaiciuotiMediana(studentas.namuDarbai);
         double Galutinis_med = 0.4*mediana+0.6*studentas.egz;
         std::cout << std::fixed << std::setprecision(2);
