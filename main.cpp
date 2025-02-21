@@ -55,7 +55,7 @@ int main() {
     std::string vid;
     std::cout<<"V - vidurkis, M - mediana"<<std::endl;
     std::cin>>vid;
-    if(vid == "V")
+    if(vid == "V" || vid == "v")
     {
         std::cout << "-----------------------------------------------------------"<<std::endl;
         std::cout << "Vardas     Pavarde       Galutunis (vid.)"<<std::endl;
