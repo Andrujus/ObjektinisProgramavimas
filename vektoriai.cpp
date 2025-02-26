@@ -30,57 +30,23 @@ void gen_name(std::string& vardas, std::string& pavarde) {
 }
 
 void Duom(std::vector<Student>& studentai) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distr(1, 10);
-
-    std::string kitas_stud = "T";
-    while (kitas_stud == "T" || kitas_stud == "t") {
+    std::ifstream rf("kursiokai.txt");
+    if (!rf) {
+        std::cerr << "Failas nerastas\n";
+        return;
+    }
+    std::string eilute;
+    std::getline(rf, eilute);
+    while(std::getline(rf, eilute)){
         Student studentas;
-        std::cout << "1 - įvesti pažymius rankiniu būdu\n2 - generuoti atsitiktinius pažymius\n3 - generuoti vardus, pavardes ir pazymius\n4 - baigti\n";
-        int ch;
-        std::cin >> ch;
-        if (ch == 4) break;
-        if (ch == 1) {
-            std::cout << "Įveskite studento vardą: ";
-            std::cin >> studentas.vardas;
-            std::cout << "Įveskite studento pavardę: ";
-            std::cin >> studentas.pavarde;
-            std::cout << "Įveskite namų darbų pažymius (įveskite -1, kad baigtumėte): ";
-            int pazymys;
-            while (true) {
-                std::cin >> pazymys;
-                if (pazymys == -1) break;
-                studentas.namuDarbai.push_back(pazymys);
-            }
-            std::cout << "Įveskite egzamino rezultatą: ";
-            std::cin >> studentas.egz;
-        } 
-        if (ch == 2) {
-            std::cout << "Įveskite studento vardą: ";
-            std::cin >> studentas.vardas;
-            std::cout << "Įveskite studento pavardę: ";
-            std::cin >> studentas.pavarde;
-
-            for (int i = 0; i < 5; i++) {
-                studentas.namuDarbai.push_back(distr(gen));
-            }
-
-            studentas.egz = distr(gen);
+        rf>>studentas.vardas>>studentas.pavarde;
+        int pazymys;
+        for (int i = 0; i < 5; i++){
+            rf>>pazymys;
+            studentas.namuDarbai.push_back(pazymys);
         }
-        if (ch == 3) {
-            gen_name(studentas.vardas, studentas.pavarde);
-            for (int i = 0; i < 5; i++) {
-                studentas.namuDarbai.push_back(distr(gen));
-            }
-            studentas.egz = distr(gen);
-        }
-        studentas.namuDarbai.clear();
-
+        rf>>studentas.egz;
         studentai.push_back(studentas);
-
-        std::cout << "Ar norite tęsti? (T - taip, N - ne): ";
-        std::cin >> kitas_stud;
     }
 }
 
