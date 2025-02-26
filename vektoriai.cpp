@@ -37,55 +37,43 @@ void Duom(std::vector<Student>& studentai) {
     }
     std::string eilute;
     std::getline(rf, eilute);
-    while(std::getline(rf, eilute)){
-        Student studentas;
-        rf>>studentas.vardas>>studentas.pavarde;
+    Student studentas;
+    while(rf>>studentas.vardas>>studentas.pavarde){
+        studentas.namuDarbai.clear();
         int pazymys;
         for (int i = 0; i < 5; i++){
             rf>>pazymys;
             studentas.namuDarbai.push_back(pazymys);
         }
         rf>>studentas.egz;
+    
         studentai.push_back(studentas);
     }
 }
 
-void Rez(const std::vector<Student>& studentai, bool n_vid) {
+void Rez(const std::vector<Student>& studentai) {
     std::cout << std::fixed << std::setprecision(2);
     std::cout << "-----------------------------------------------------------\n";
-    if (n_vid)
-        std::cout << std::setw(15) << "Vardas" << std::setw(15) << "Pavarde" << std::setw(25) << "Galutinis (vid.)\n";
-    else
-        std::cout << std::setw(15) << "Vardas" << std::setw(15) << "Pavarde" << std::setw(25) << "Galutinis (med.)\n";
+    std::cout << std::setw(15) << "Vardas" << std::setw(15) << "Pavarde" << std::setw(25) << "Galutinis (vid.)  Galutinis (med.)\n";
     std::cout << "-----------------------------------------------------------\n";
 
     for (const auto& studentas : studentai) {
-        double galutinis;
-        if (n_vid) {
-            galutinis = Vidurkis(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
-        } else {
-            galutinis = apskaiciuotiMediana(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
-        }
+        double galutinis_v;
+        double galutinis_m;
+        galutinis_v = Vidurkis(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
+        galutinis_m = apskaiciuotiMediana(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
+
 
         std::cout << std::setw(15) << studentas.vardas 
                   << std::setw(15) << studentas.pavarde 
-                  << std::setw(15) << galutinis << "\n";
+                  << std::setw(15) << galutinis_v
+                  << std::setw(15) << galutinis_m << "\n";
     }
 }
 
 int main() {
     std::vector<Student> studentai;
     Duom(studentai);
-
-    std::string vid;
-    std::cout << "V - vidurkis, M - mediana: ";
-    std::cin >> vid;
-
-    if (vid == "V" || vid == "v") {
-        Rez(studentai, true);
-    } else {
-        Rez(studentai, false);
-    }
-
+    Rez(studentai);
     return 0;
 }
