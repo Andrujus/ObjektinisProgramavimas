@@ -1,4 +1,11 @@
 #include "functions.h"
+#include <fstream>
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <algorithm>
+#include <random>
+
 
 double Vidurkis(const std::vector<int>& pazymiai) {
     if (pazymiai.empty()) return 0.0;
@@ -17,6 +24,7 @@ double apskaiciuotiMediana(std::vector<int> pazymiai) {
         return pazymiai[dydis / 2];
     }
 }
+
 void gen_name(std::string& vardas, std::string& pavarde) {
     std::vector<std::string> vardai = {"Pijus", "Justas", "Kostas", "Petras"};
     std::vector<std::string> pavardes = {"Savanevicius", "Andru", "Baranauskas", "Dovydaitis"};
@@ -35,18 +43,23 @@ void Duom(std::vector<Student>& studentai) {
         std::cerr << "Failas nerastas\n";
         return;
     }
-    std::string eilute;
-    std::getline(rf, eilute);
+    std::string var, pav, nd;
+    rf >> var >> pav;
+    int kiek = 0;
+    
+    while (rf >> nd && nd != "Egzaminas") {
+        kiek = kiek + 1;
+    }
     Student studentas;
-    while(rf>>studentas.vardas>>studentas.pavarde){
+    while (rf >> studentas.vardas >> studentas.pavarde) {
         studentas.namuDarbai.clear();
         int pazymys;
-        for (int i = 0; i < 5; i++){
-            rf>>pazymys;
+        for (int i = 0; i < kiek; i++) {
+            rf >> pazymys;
             studentas.namuDarbai.push_back(pazymys);
         }
-        rf>>studentas.egz;
-    
+        rf >> studentas.egz;
+
         studentai.push_back(studentas);
     }
 }
@@ -58,11 +71,8 @@ void Rez(const std::vector<Student>& studentai) {
     std::cout << "-----------------------------------------------------------\n";
 
     for (const auto& studentas : studentai) {
-        double galutinis_v;
-        double galutinis_m;
-        galutinis_v = Vidurkis(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
-        galutinis_m = apskaiciuotiMediana(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
-
+        double galutinis_v = Vidurkis(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
+        double galutinis_m = apskaiciuotiMediana(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
 
         std::cout << std::setw(15) << studentas.vardas 
                   << std::setw(15) << studentas.pavarde 
