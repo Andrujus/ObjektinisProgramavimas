@@ -49,25 +49,25 @@ void Duom(std::vector<Student>& studentai) {
         std::cin >> ch;
         if (ch == 5) break;
         if (ch == 4) {
-            std::ifstream rf("studentai10000.txt");
-            if (!rf) {
+            std::ifstream df("studentai10000.txt");
+            if (!df) {
                 std::cerr << "Failas nerastas\n";
                 return;
             }
             std::string var, pav, nd;
-            rf >> var >> pav;
+            df >> var >> pav;
             int kiek = 0;
-            while (rf >> nd && nd != "Egz.") {
+            while (df >> nd && nd != "Egz.") {
                 kiek++;
             }
-            while (rf >> studentas.vardas >> studentas.pavarde) {
+            while (df >> studentas.vardas >> studentas.pavarde) {
                 studentas.namuDarbai.clear();
                 int pazymys;
                 for (int i = 0; i < kiek; i++) {
-                    rf >> pazymys;
+                    df >> pazymys;
                     studentas.namuDarbai.push_back(pazymys);
                 }
-                rf >> studentas.egz;
+                df >> studentas.egz;
                 studentai.push_back(studentas);
             }
         }
