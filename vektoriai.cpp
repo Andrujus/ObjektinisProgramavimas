@@ -38,7 +38,7 @@ void gen_name(std::string& vardas, std::string& pavarde) {
 }
 
 void Duom(std::vector<Student>& studentai) {
-    std::ifstream rf("kursiokai.txt");
+    std::ifstream rf("studentai10000.txt");
     if (!rf) {
         std::cerr << "Failas nerastas\n";
         return;
@@ -47,7 +47,7 @@ void Duom(std::vector<Student>& studentai) {
     rf >> var >> pav;
     int kiek = 0;
     
-    while (rf >> nd && nd != "Egzaminas") {
+    while (rf >> nd && nd != "Egz.") {
         kiek = kiek + 1;
     }
     Student studentas;
