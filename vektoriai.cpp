@@ -61,7 +61,7 @@ void Duom(std::vector<Student>& studentai) {
                 kiek++;
             }
             while (rf >> studentas.vardas >> studentas.pavarde) {
-                studentas.namuDarbai.clear(); // Išvalome namų darbų sąrašą prieš pridedant naujus pažymius
+                studentas.namuDarbai.clear();
                 int pazymys;
                 for (int i = 0; i < kiek; i++) {
                     rf >> pazymys;
@@ -78,7 +78,7 @@ void Duom(std::vector<Student>& studentai) {
             std::cin >> studentas.pavarde;
             std::cout << "Įveskite namų darbų pažymius (įveskite -1, kad baigtumėte): ";
             int pazymys;
-            studentas.namuDarbai.clear(); // Išvalome namų darbų sąrašą prieš pridedant naujus pažymius
+            studentas.namuDarbai.clear();
             while (true) {
                 std::cin >> pazymys;
                 if (pazymys == -1) break;
@@ -92,7 +92,7 @@ void Duom(std::vector<Student>& studentai) {
             std::cin >> studentas.vardas;
             std::cout << "Įveskite studento pavardę: ";
             std::cin >> studentas.pavarde;
-            studentas.namuDarbai.clear(); // Išvalome namų darbų sąrašą prieš pridedant naujus pažymius
+            studentas.namuDarbai.clear();
             for (int i = 0; i < 5; i++) {
                 studentas.namuDarbai.push_back(distr(gen));
             }
@@ -100,13 +100,13 @@ void Duom(std::vector<Student>& studentai) {
         }
         if (ch == 3) {
             gen_name(studentas.vardas, studentas.pavarde);
-            studentas.namuDarbai.clear(); // Išvalome namų darbų sąrašą prieš pridedant naujus pažymius
+            studentas.namuDarbai.clear();
             for (int i = 0; i < 5; i++) {
                 studentas.namuDarbai.push_back(distr(gen));
             }
             studentas.egz = distr(gen);
         }
-        studentai.push_back(studentas); // Pridedame studentą į sąrašą po visų duomenų įvedimo/generavimo
+        studentai.push_back(studentas);
         std::cout << "Ar norite tęsti? (T - taip, N - ne): ";
         std::cin >> kitas_stud;
     }
