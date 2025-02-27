@@ -110,6 +110,8 @@ void Duom(std::vector<Student>& studentai) {
 }
 
 void Rez(const std::vector<Student>& studentai) {
+    std::cout << "Pasirinkite rikiavimo būdą:\n1 - pagal vardą\n2 - pagal pavardę\n3 - pagal vidurkį\n4 - pagal medianą\n";
+    
     std::cout << std::fixed << std::setprecision(2);
     std::cout << "-----------------------------------------------------------\n";
     std::cout << std::setw(15) << "Vardas" << std::setw(15) << "Pavarde" << std::setw(25) << "Galutinis (vid.)  Galutinis (med.)\n";
