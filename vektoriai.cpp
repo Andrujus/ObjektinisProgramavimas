@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <random>
 
-
 double Vidurkis(const std::vector<int>& pazymiai) {
     if (pazymiai.empty()) return 0.0;
     double suma = 0.0;
@@ -38,29 +37,75 @@ void gen_name(std::string& vardas, std::string& pavarde) {
 }
 
 void Duom(std::vector<Student>& studentai) {
-    std::ifstream rf("studentai10000.txt");
-    if (!rf) {
-        std::cerr << "Failas nerastas\n";
-        return;
-    }
-    std::string var, pav, nd;
-    rf >> var >> pav;
-    int kiek = 0;
-    
-    while (rf >> nd && nd != "Egz.") {
-        kiek = kiek + 1;
-    }
-    Student studentas;
-    while (rf >> studentas.vardas >> studentas.pavarde) {
-        studentas.namuDarbai.clear();
-        int pazymys;
-        for (int i = 0; i < kiek; i++) {
-            rf >> pazymys;
-            studentas.namuDarbai.push_back(pazymys);
-        }
-        rf >> studentas.egz;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distr(1, 10);
 
+    std::string kitas_stud = "T";
+    while (kitas_stud == "T" || kitas_stud == "t") {
+        Student studentas;
+        std::cout << "1 - įvesti pažymius rankiniu būdu\n2 - generuoti atsitiktinius pažymius\n3 - generuoti vardus, pavardes ir pazymius\n4 - nuskaityti is failo\n5 - baigti\n";
+        int ch;
+        std::cin >> ch;
+        if (ch == 5) break;
+        if (ch == 4) {
+            std::ifstream rf("studentai10000.txt");
+            if (!rf) {
+                std::cerr << "Failas nerastas\n";
+                return;
+            }
+            std::string var, pav, nd;
+            rf >> var >> pav;
+            int kiek = 0;
+            while (rf >> nd && nd != "Egz.") {
+                kiek++;
+            }
+            while (rf >> studentas.vardas >> studentas.pavarde) {
+                studentas.namuDarbai.clear();
+                int pazymys;
+                for (int i = 0; i < kiek; i++) {
+                    rf >> pazymys;
+                    studentas.namuDarbai.push_back(pazymys);
+                }
+                rf >> studentas.egz;
+                studentai.push_back(studentas);
+            }
+        }
+        if (ch == 1) {
+            std::cout << "Įveskite studento vardą: ";
+            std::cin >> studentas.vardas;
+            std::cout << "Įveskite studento pavardę: ";
+            std::cin >> studentas.pavarde;
+            std::cout << "Įveskite namų darbų pažymius (įveskite -1, kad baigtumėte): ";
+            int pazymys;
+            while (true) {
+                std::cin >> pazymys;
+                if (pazymys == -1) break;
+                studentas.namuDarbai.push_back(pazymys);
+            }
+            std::cout << "Įveskite egzamino rezultatą: ";
+            std::cin >> studentas.egz;
+        }
+        if (ch == 2) {
+            std::cout << "Įveskite studento vardą: ";
+            std::cin >> studentas.vardas;
+            std::cout << "Įveskite studento pavardę: ";
+            std::cin >> studentas.pavarde;
+            for (int i = 0; i < 5; i++) {
+                studentas.namuDarbai.push_back(distr(gen));
+            }
+            studentas.egz = distr(gen);
+        }
+        if (ch == 3) {
+            gen_name(studentas.vardas, studentas.pavarde);
+            for (int i = 0; i < 5; i++) {
+                studentas.namuDarbai.push_back(distr(gen));
+            }
+            studentas.egz = distr(gen);
+        }
         studentai.push_back(studentas);
+        std::cout << "Ar norite tęsti? (T - taip, N - ne): ";
+        std::cin >> kitas_stud;
     }
 }
 
