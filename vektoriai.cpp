@@ -1,4 +1,5 @@
 #include "functions.h"
+#include "student.h"
 #include <fstream>
 #include <iostream>
 #include <vector>
