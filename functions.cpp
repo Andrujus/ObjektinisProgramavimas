@@ -95,6 +95,7 @@ void Duom(std::vector<Student>& studentai) {
                 if (pazymys == -1) break;
                 studentas.namuDarbai.push_back(pazymys);
             }
+            if (std::cin.fail()) throw std::runtime_error("Neteisingas pažymys");
             std::cout << "Įveskite egzamino rezultatą: ";
             std::cin >> studentas.egz;
             } catch (const std::exception& e) {
