@@ -57,6 +57,7 @@ void Duom(std::vector<Student>& studentai) {
                 studentas.namuDarbai.clear();
                 int pazymys;
                 for (int i = 0; i < kiek; i++) {
+                    if (!(rf >> pazymys)) throw std::runtime_error("Klaida skaitant pažymius iš failo.");
                     rf >> pazymys;
                     studentas.namuDarbai.push_back(pazymys);
                 }
