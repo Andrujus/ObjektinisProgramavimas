@@ -91,6 +91,7 @@ void Duom(std::vector<Student>& studentai) {
             studentas.namuDarbai.clear();
             while (true) {
                 std::cin >> pazymys;
+                if (pazymys < -1 || pazymys > 10) throw std::runtime_error("Pažymys turi būti intervale nuo 1 iki 10");
                 if (pazymys == -1) break;
                 studentas.namuDarbai.push_back(pazymys);
             }
@@ -102,15 +103,22 @@ void Duom(std::vector<Student>& studentai) {
             
         }
         if (ch == 2) {
+            try{
             std::cout << "Įveskite studento vardą: ";
             std::cin >> studentas.vardas;
+            if (std::isdigit(studentas.vardas[0])) throw std::runtime_error("Vardas negali prasidėti skaičiumi");
             std::cout << "Įveskite studento pavardę: ";
             std::cin >> studentas.pavarde;
+            if (std::isdigit(studentas.pavarde[0])) throw std::runtime_error("Pavarde negali prasidėti skaičiumi");
             studentas.namuDarbai.clear();
             for (int i = 0; i < 5; i++) {
                 studentas.namuDarbai.push_back(distr(gen));
             }
             studentas.egz = distr(gen);
+            } catch (const std::exception& e) {
+                std::cerr << e.what() << std::endl;
+            }
+            
         }
         if (ch == 3) {
             gen_name(studentas.vardas, studentas.pavarde);
