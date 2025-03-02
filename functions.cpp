@@ -46,10 +46,7 @@ void Duom(std::vector<Student>& studentai) {
         if (ch == 5) break;
         if (ch == 4) {
             std::ifstream rf("studentai10000.txt");
-            if (!rf) {
-                std::cerr << "Failas nerastas\n";
-                return;
-            }
+            if (!rf) throw std::runtime_error("Failas nerastas");
             std::string var, pav, nd;
             rf >> var >> pav;
             int kiek = 0;
