@@ -9,9 +9,5 @@ struct Student {
     std::string pavarde;
     std::vector<int> namuDarbai;
     int egz;
-
-    double Vidurkis() const;
-    double apskaiciuotiMediana() const;
 };
-
 #endif

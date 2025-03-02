@@ -1,25 +1,15 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-#include <random>
-#include <iostream>
-#include <iomanip>
+#include "student.h"
+#include "functions.cpp"
 #include <vector>
 #include <string>
-#include <algorithm>
-#include <fstream>
-
-struct Student {
-    std::string vardas;
-    std::string pavarde;
-    std::vector<int> namuDarbai;
-    int egz;
-};
 
 double Vidurkis(const std::vector<int>& pazymiai);
 double apskaiciuotiMediana(std::vector<int> pazymiai);
-void Duom(Student& studentas);
-void Rez(const Student& studentas);
 void gen_name(std::string& vardas, std::string& pavarde);
+void Duom(std::vector<Student>& studentai);
+void Rez(std::vector<Student>& studentai);
 
 #endif
