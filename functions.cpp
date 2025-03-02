@@ -79,10 +79,13 @@ void Duom(std::vector<Student>& studentai) {
             }
         }
         if (ch == 1) {
+            try{
             std::cout << "Įveskite studento vardą: ";
             std::cin >> studentas.vardas;
+            if (std::isdigit(studentas.vardas[0])) throw std::runtime_error("Vardas negali prasidėti skaičiumi");
             std::cout << "Įveskite studento pavardę: ";
             std::cin >> studentas.pavarde;
+            if (std::isdigit(studentas.pavarde[0])) throw std::runtime_error("Pavarde negali prasidėti skaičiumi");
             std::cout << "Įveskite namų darbų pažymius (įveskite -1, kad baigtumėte): ";
             int pazymys;
             studentas.namuDarbai.clear();
@@ -93,6 +96,10 @@ void Duom(std::vector<Student>& studentai) {
             }
             std::cout << "Įveskite egzamino rezultatą: ";
             std::cin >> studentas.egz;
+            } catch (const std::exception& e) {
+                std::cerr << e.what() << std::endl;
+            }
+            
         }
         if (ch == 2) {
             std::cout << "Įveskite studento vardą: ";
