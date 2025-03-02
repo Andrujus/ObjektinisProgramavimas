@@ -32,6 +32,7 @@ void gen_name(std::string& vardas, std::string& pavarde) {
     vardas = vardai[distr(gen)];
     pavarde = pavardes[distr(gen)];
 }
+
 void Duom(std::vector<Student>& studentai) {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -45,24 +46,36 @@ void Duom(std::vector<Student>& studentai) {
         std::cin >> ch;
         if (ch == 5) break;
         if (ch == 4) {
-            std::ifstream rf("studentai10000.txt");
-            if (!rf) throw std::runtime_error("Failas nerastas");
-            std::string var, pav, nd;
-            rf >> var >> pav;
-            int kiek = 0;
-            while (rf >> nd && nd != "Egz.") {
-                kiek++;
-            }
-            while (rf >> studentas.vardas >> studentas.pavarde) {
-                studentas.namuDarbai.clear();
-                int pazymys;
-                for (int i = 0; i < kiek; i++) {
-                    if (!(rf >> pazymys)) throw std::runtime_error("Klaida skaitant pažymius iš failo.");
-                    rf >> pazymys;
-                    studentas.namuDarbai.push_back(pazymys);
+            try {
+                std::ifstream rf("studentai10000.txt");
+                if (!rf) throw std::runtime_error("Failas nerastas");
+
+                std::string var, pav, nd;
+                rf >> var >> pav;
+                int kiek = 0;
+
+                while (rf >> nd && nd != "Egz.") {
+                    kiek++;
                 }
-                rf >> studentas.egz;
-                studentai.push_back(studentas);
+
+                while (rf >> studentas.vardas >> studentas.pavarde) {
+                    studentas.namuDarbai.clear();
+                    int pazymys;
+
+                    for (int i = 0; i < kiek; i++) {
+                        if (!(rf >> pazymys)) 
+                            throw std::runtime_error("Klaida skaitant pažymius iš failo.");
+                        studentas.namuDarbai.push_back(pazymys);
+                    }
+
+                    if (!(rf >> studentas.egz))
+                        throw std::runtime_error("Klaida skaitant egzamino pažymį iš failo.");
+                    
+                    studentai.push_back(studentas);
+                }
+
+            } catch (const std::exception& e) {
+                std::cerr << e.what() << std::endl;
             }
         }
         if (ch == 1) {
@@ -166,7 +179,7 @@ void Rez(std::vector<Student>& studentai) {
             rf << std::setw(15) << studentas.vardas 
                << std::setw(15) << studentas.pavarde
                << std::setw(15) << galutinis_v
-                << std::setw(15) << galutinis_m << "\n";
+               << std::setw(15) << galutinis_m << "\n";
         }
     }
 }
