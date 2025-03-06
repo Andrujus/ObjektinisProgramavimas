@@ -199,3 +199,20 @@ void Rez(std::vector<Student>& studentai) {
         }
     }
 }
+void gen_file(std::string pav, int kiek)
+{
+    std::ofstream gf(pav);
+    if (!gf) std::cout<<"failas nebuvo sukurtas"<<std::endl;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distr(1, 10);
+    for (int i=0; i<kiek; i++)
+    {
+        gf<<"Vardas"<<i<<" Pavarde"<<i;
+        for (int j=0; j<5; j++)
+        {
+            gf<<" "<<distr(gen);
+        }
+        gf<<" Egzaminas "<<distr(gen)<<std::endl;
+    }
+}
