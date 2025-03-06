@@ -235,3 +235,15 @@ void failo_nuskaitymas(const std::string& pav, int kiek, std::vector<Student>& s
         studentai.push_back(studentas);
     }
 }
+void padalinti_studentus (std::vector<Student>& studentai, std::vector<Student>& vargsiukai, std::vector<Student>& kietekai)
+{
+    for (const auto& studentas : studentai)
+    {
+        double galutinis_v = Vidurkis(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
+        if (galutinis_v < 5.0)
+        {
+            vargsiukai.push_back(studentas);
+        }
+        else kietekai.push_back(studentas);
+    }
+}
