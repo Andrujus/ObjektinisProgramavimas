@@ -41,7 +41,7 @@ void Duom(std::vector<Student>& studentai) {
     std::string kitas_stud = "T";
     while (kitas_stud == "T" || kitas_stud == "t") {
         Student studentas;
-        std::cout << "1 - įvesti pažymius rankiniu būdu\n2 - generuoti atsitiktinius pažymius\n3 - generuoti vardus, pavardes ir pazymius\n4 - nuskaityti is failo\n5 - baigti\n";
+        std::cout << "1 - įvesti pažymius rankiniu būdu\n2 - generuoti atsitiktinius pažymius\n3 - generuoti vardus, pavardes ir pazymius\n4 - nuskaityti is failo\n5 - generuoti failus\n6 - baigti\n";
         int ch;
         std::cin >> ch;
         if (ch == 5) break;
@@ -199,7 +199,7 @@ void Rez(std::vector<Student>& studentai) {
         }
     }
 }
-void gen_file(std::string pav, int kiek)
+void gen_file(const std::string& pav, int kiek)
 {
     std::ofstream gf(pav);
     if (!gf) std::cout<<"failas nebuvo sukurtas"<<std::endl;
@@ -208,11 +208,30 @@ void gen_file(std::string pav, int kiek)
     std::uniform_int_distribution<int> distr(1, 10);
     for (int i=0; i<kiek; i++)
     {
-        gf<<"Vardas"<<i<<" Pavarde"<<i;
+        gf<<"VardasNR"<<i<<" "<<"PavardeNR"<<i;
         for (int j=0; j<5; j++)
         {
             gf<<" "<<distr(gen);
         }
-        gf<<" Egzaminas "<<distr(gen)<<std::endl;
+        gf<<distr(gen)<<std::endl;
+    }
+    gf.close();
+}
+void failo_nuskaitymas(const std::string& pav, int kiek, std::vector<Student>& studentai)
+{
+    std::ifstream rf(pav);
+    if (!rf) std::cout<<"failas neatsidaro"<<std::endl;
+    Student studentas;
+    while (rf >> studentas.vardas >> studentas.pavarde) {
+        studentas.namuDarbai.clear();
+        int pazymys;
+        for (int i = 0; i < 5; i++) {
+            if (!(rf >> pazymys)) 
+                throw std::runtime_error("Klaida skaitant pažymius iš failo.");
+            studentas.namuDarbai.push_back(pazymys);
+        }
+        if (!(rf >> studentas.egz))
+            throw std::runtime_error("Klaida skaitant egzamino pažymį iš failo.");
+        studentai.push_back(studentas);
     }
 }
