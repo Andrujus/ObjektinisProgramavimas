@@ -32,6 +32,75 @@ void gen_name(std::string& vardas, std::string& pavarde) {
     vardas = vardai[distr(gen)];
     pavarde = pavardes[distr(gen)];
 }
+void gen_file(const std::string& pav, int kiek)
+{
+    std::ofstream gf(pav);
+    if (!gf) std::cout<<"failas nebuvo sukurtas"<<std::endl;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distr(1, 10);
+    for (int i=0; i<kiek; i++)
+    {
+        gf<<"VardasNR"<<i<<" "<<"PavardeNR"<<i;
+        for (int j=0; j<5; j++)
+        {
+            gf<<" "<<distr(gen);
+        }
+        gf<<" ";
+        gf<<distr(gen)<<std::endl;
+    }
+    gf.close();
+}
+void failo_nuskaitymas(const std::string& pav, int kiek, std::vector<Student>& studentai)
+{
+    std::ifstream rf(pav);
+    if (!rf) std::cout<<"failas neatsidaro"<<std::endl;
+    Student studentas;
+    while (rf >> studentas.vardas >> studentas.pavarde) {
+        studentas.namuDarbai.clear();
+        int pazymys;
+        for (int i = 0; i < 5; i++) {
+            if (!(rf >> pazymys)) 
+                throw std::runtime_error("Klaida skaitant pažymius iš failo.");
+            studentas.namuDarbai.push_back(pazymys);
+        }
+        if (!(rf >> studentas.egz))
+            throw std::runtime_error("Klaida skaitant egzamino pažymį iš failo.");
+        studentai.push_back(studentas);
+    }
+}
+void padalinti_studentus (std::vector<Student>& studentai, std::vector<Student>& vargsiukai, std::vector<Student>& kietekai)
+{
+    for (const auto& studentas : studentai)
+    {
+        double galutinis_v = Vidurkis(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
+        if (galutinis_v < 5.0)
+        {
+            vargsiukai.push_back(studentas);
+        }
+        else kietekai.push_back(studentas);
+    }
+}
+void issaugoti_studentus(const std::vector<Student>& studentai, const std::string& failo_pav) {
+    std::ofstream out(failo_pav);
+    if (!out) {
+        std::cerr << "Klaida atidarant failą: " << failo_pav << std::endl;
+        return;
+    }
+
+    out << std::fixed << std::setprecision(2);
+    out << std::setw(15) << "Vardas" << std::setw(15) << "Pavarde" << std::setw(15) << "Galutinis (vid.)\n";
+    out << "-----------------------------------------------------------\n";
+
+    for (const auto& studentas : studentai) {
+        double galutinis_v = Vidurkis(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
+        out << std::setw(15) << studentas.vardas
+            << std::setw(15) << studentas.pavarde
+            << std::setw(15) << galutinis_v << "\n";
+    }
+
+    out.close();
+}
 
 void Duom(std::vector<Student>& studentai) {
     std::random_device rd;
@@ -44,7 +113,33 @@ void Duom(std::vector<Student>& studentai) {
         std::cout << "1 - įvesti pažymius rankiniu būdu\n2 - generuoti atsitiktinius pažymius\n3 - generuoti vardus, pavardes ir pazymius\n4 - nuskaityti is failo\n5 - generuoti failus\n6 - baigti\n";
         int ch;
         std::cin >> ch;
-        if (ch == 5) break;
+        if (ch == 6) break;
+        if (ch == 5)
+        {
+            std::vector<Student> vargsiukai;
+            std::vector<Student> kietekai;
+            std::vector<int> skaicius = {1000, 10000, 100000};
+            for (int i=0; i<skaicius.size(); i++)
+            {
+                std::string pav = "studentai_" + std::to_string(skaicius[i]) + ".txt";
+                gen_file(pav, skaicius[i]);
+                std::cout<<"Failas studentai_"<<skaicius[i]<<".txt sukurtas"<<std::endl;
+            }
+            for (int i=0; i<skaicius.size(); i++)
+            {
+                std::string pav = "studentai_" + std::to_string(skaicius[i]) + ".txt";
+                failo_nuskaitymas(pav, skaicius[i], studentai);
+                std::cout<<"Failas studentai_"<<skaicius[i]<<".txt nuskaitytas"<<std::endl;
+            }
+            for (int i=0; i<skaicius.size(); i++)
+            {
+                std::string pav = "studentai_" + std::to_string(skaicius[i]) + ".txt";
+                padalinti_studentus(studentai, vargsiukai, kietekai);
+                
+            }
+            issaugoti_studentus(vargsiukai, "vargsiukai.txt");
+            issaugoti_studentus(kietekai, "kietekai.txt");
+        }
         if (ch == 4) {
             try {
                 std::ifstream rf("studentai10000.txt");
@@ -199,71 +294,4 @@ void Rez(std::vector<Student>& studentai) {
         }
     }
 }
-void gen_file(const std::string& pav, int kiek)
-{
-    std::ofstream gf(pav);
-    if (!gf) std::cout<<"failas nebuvo sukurtas"<<std::endl;
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<int> distr(1, 10);
-    for (int i=0; i<kiek; i++)
-    {
-        gf<<"VardasNR"<<i<<" "<<"PavardeNR"<<i;
-        for (int j=0; j<5; j++)
-        {
-            gf<<" "<<distr(gen);
-        }
-        gf<<distr(gen)<<std::endl;
-    }
-    gf.close();
-}
-void failo_nuskaitymas(const std::string& pav, int kiek, std::vector<Student>& studentai)
-{
-    std::ifstream rf(pav);
-    if (!rf) std::cout<<"failas neatsidaro"<<std::endl;
-    Student studentas;
-    while (rf >> studentas.vardas >> studentas.pavarde) {
-        studentas.namuDarbai.clear();
-        int pazymys;
-        for (int i = 0; i < 5; i++) {
-            if (!(rf >> pazymys)) 
-                throw std::runtime_error("Klaida skaitant pažymius iš failo.");
-            studentas.namuDarbai.push_back(pazymys);
-        }
-        if (!(rf >> studentas.egz))
-            throw std::runtime_error("Klaida skaitant egzamino pažymį iš failo.");
-        studentai.push_back(studentas);
-    }
-}
-void padalinti_studentus (std::vector<Student>& studentai, std::vector<Student>& vargsiukai, std::vector<Student>& kietekai)
-{
-    for (const auto& studentas : studentai)
-    {
-        double galutinis_v = Vidurkis(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
-        if (galutinis_v < 5.0)
-        {
-            vargsiukai.push_back(studentas);
-        }
-        else kietekai.push_back(studentas);
-    }
-}
-void issaugoti_studentus(const std::vector<Student>& studentai, const std::string& failo_pav) {
-    std::ofstream out(failo_pav);
-    if (!out) {
-        std::cerr << "Klaida atidarant failą: " << failo_pav << std::endl;
-        return;
-    }
 
-    out << std::fixed << std::setprecision(2);
-    out << std::setw(15) << "Vardas" << std::setw(15) << "Pavarde" << std::setw(15) << "Galutinis (vid.)\n";
-    out << "-----------------------------------------------------------\n";
-
-    for (const auto& studentas : studentai) {
-        double galutinis_v = Vidurkis(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
-        out << std::setw(15) << studentas.vardas
-            << std::setw(15) << studentas.pavarde
-            << std::setw(15) << galutinis_v << "\n";
-    }
-
-    out.close();
-}
