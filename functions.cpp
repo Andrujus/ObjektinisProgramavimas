@@ -102,7 +102,7 @@ void issaugoti_studentus(const std::vector<Student>& studentai, const std::strin
     out.close();
 }
 
-void Duom(std::vector<Student>& studentai) {
+void Duom(std::vector<Student>& studentai, int& ch1) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> distr(1, 10);
@@ -111,10 +111,9 @@ void Duom(std::vector<Student>& studentai) {
     while (kitas_stud == "T" || kitas_stud == "t") {
         Student studentas;
         std::cout << "1 - įvesti pažymius rankiniu būdu\n2 - generuoti atsitiktinius pažymius\n3 - generuoti vardus, pavardes ir pazymius\n4 - nuskaityti is failo\n5 - generuoti failus\n6 - baigti\n";
-        int ch;
-        std::cin >> ch;
-        if (ch == 6) break;
-        if (ch == 5)
+        std::cin >> ch1;
+        if (ch1 == 6) break;
+        if (ch1 == 5)
         {
             std::vector<Student> vargsiukai;
             std::vector<Student> kietekai;
@@ -140,7 +139,7 @@ void Duom(std::vector<Student>& studentai) {
             issaugoti_studentus(vargsiukai, "vargsiukai.txt");
             issaugoti_studentus(kietekai, "kietekai.txt");
         }
-        if (ch == 4) {
+        if (ch1 == 4) {
             try {
                 std::ifstream rf("studentai10000.txt");
                 if (!rf) throw std::runtime_error("Failas nerastas");
@@ -173,7 +172,7 @@ void Duom(std::vector<Student>& studentai) {
                 std::cerr << e.what() << std::endl;
             }
         }
-        if (ch == 1) {
+        if (ch1 == 1) {
             try{
             std::cout << "Įveskite studento vardą: ";
             std::cin >> studentas.vardas;
@@ -198,7 +197,7 @@ void Duom(std::vector<Student>& studentai) {
             }
             
         }
-        if (ch == 2) {
+        if (ch1 == 2) {
             try{
             std::cout << "Įveskite studento vardą: ";
             std::cin >> studentas.vardas;
@@ -216,7 +215,7 @@ void Duom(std::vector<Student>& studentai) {
             }
             
         }
-        if (ch == 3) {
+        if (ch1 == 3) {
             gen_name(studentas.vardas, studentas.pavarde);
             studentas.namuDarbai.clear();
             for (int i = 0; i < 5; i++) {
@@ -230,8 +229,9 @@ void Duom(std::vector<Student>& studentai) {
     }
 }
 
-void Rez(std::vector<Student>& studentai) {
-    std::cout << "Pasirinkite rikiavimo būdą:\n1 - pagal vardą\n2 - pagal pavardę\n3 - pagal vidurkį\n4 - pagal medianą\n";
+void Rez(std::vector<Student>& studentai, int& ch1) {
+    while (ch1 != 5) {
+        std::cout << "Pasirinkite rikiavimo būdą:\n1 - pagal vardą\n2 - pagal pavardę\n3 - pagal vidurkį\n4 - pagal medianą\n";
     int ch;
     std::cin >> ch;
     switch (ch) {
@@ -293,5 +293,7 @@ void Rez(std::vector<Student>& studentai) {
                << std::setw(15) << galutinis_m << "\n";
         }
     }
+    }
+    
 }
 
