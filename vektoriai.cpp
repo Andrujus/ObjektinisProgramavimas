@@ -40,6 +40,7 @@ void Duom(std::vector<Student>& studentai) {
         std::cout << "1 - įvesti pažymius rankiniu būdu\n2 - generuoti atsitiktinius pažymius\n3 - generuoti vardus, pavardes ir pazymius\n4 - baigti\n";
         int ch;
         std::cin >> ch;
+        studentas.namuDarbai.clear();
         if (ch == 4) break;
         if (ch == 1) {
             std::cout << "Įveskite studento vardą: ";
@@ -75,7 +76,6 @@ void Duom(std::vector<Student>& studentai) {
             }
             studentas.egz = distr(gen);
         }
-        studentas.namuDarbai.clear();
 
         studentai.push_back(studentas);
 
