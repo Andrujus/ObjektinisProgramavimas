@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <random>
+#include <chrono>
 
 double Vidurkis(const std::vector<int>& pazymiai) {
     if (pazymiai.empty()) return 0.0;
@@ -34,6 +35,7 @@ void gen_name(std::string& vardas, std::string& pavarde) {
 }
 void gen_file(const std::string& pav, int kiek)
 {
+    auto start = std::chrono::high_resolution_clock::now();
     std::ofstream gf(pav);
     if (!gf) std::cout<<"failas nebuvo sukurtas"<<std::endl;
     std::random_device rd;
@@ -49,6 +51,9 @@ void gen_file(const std::string& pav, int kiek)
         gf<<" ";
         gf<<distr(gen)<<std::endl;
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> diff = end - start;
+    std::cout << "Failo " << pav << " generavimas užtruko: " << diff.count() << " s" << std::endl;
     gf.close();
 }
 void failo_nuskaitymas(const std::string& pav, int kiek, std::vector<Student>& studentai)
@@ -71,6 +76,7 @@ void failo_nuskaitymas(const std::string& pav, int kiek, std::vector<Student>& s
 }
 void padalinti_studentus (std::vector<Student>& studentai, std::vector<Student>& vargsiukai, std::vector<Student>& kietekai)
 {
+    auto start = std::chrono::high_resolution_clock::now();
     for (const auto& studentas : studentai)
     {
         double galutinis_v = Vidurkis(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
@@ -80,6 +86,9 @@ void padalinti_studentus (std::vector<Student>& studentai, std::vector<Student>&
         }
         else kietekai.push_back(studentas);
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> diff = end - start;
+    std::cout << "Studentų padalijimas užtruko: " << diff.count() << " s" << std::endl;
 }
 void issaugoti_studentus(const std::vector<Student>& studentai, const std::string& failo_pav) {
     std::ofstream out(failo_pav);
@@ -122,7 +131,6 @@ void Duom(std::vector<Student>& studentai, int& ch1) {
             {
                 std::string pav = "studentai_" + std::to_string(skaicius[i]) + ".txt";
                 gen_file(pav, skaicius[i]);
-                std::cout<<"Failas studentai_"<<skaicius[i]<<".txt sukurtas"<<std::endl;
             }
             for (int i=0; i<skaicius.size(); i++)
             {
