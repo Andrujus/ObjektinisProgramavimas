@@ -92,6 +92,7 @@ void padalinti_studentus (std::vector<Student>& studentai, std::vector<Student>&
 }
 void issaugoti_studentus(const std::vector<Student>& studentai, const std::string& failo_pav) {
     std::ofstream out(failo_pav);
+    auto start = std::chrono::high_resolution_clock::now();
     if (!out) {
         std::cerr << "Klaida atidarant failą: " << failo_pav << std::endl;
         return;
@@ -107,7 +108,9 @@ void issaugoti_studentus(const std::vector<Student>& studentai, const std::strin
             << std::setw(15) << studentas.pavarde
             << std::setw(15) << galutinis_v << "\n";
     }
-
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> diff = end - start;
+    std::cout << "Failo " << failo_pav << " išsaugojimas užtruko: " << diff.count() << " s" << std::endl;
     out.close();
 }
 
@@ -144,8 +147,10 @@ void Duom(std::vector<Student>& studentai, int& ch1) {
                 padalinti_studentus(studentai, vargsiukai, kietekai);
                 
             }
+
             issaugoti_studentus(vargsiukai, "vargsiukai.txt");
             issaugoti_studentus(kietekai, "kietekai.txt");
+            
         }
         if (ch1 == 4) {
             try {
@@ -236,6 +241,52 @@ void Duom(std::vector<Student>& studentai, int& ch1) {
         std::cin >> kitas_stud;
     }
 }
+void Rez_file(std::vector<Student>& studentai)
+{
+    int ch;
+    std::cout << "Pasirinkite rikiavimo būdą:\n1 - pagal vardą\n2 - pagal pavardę\n3 - pagal vidurkį\n4 - pagal medianą\n";
+    std::cin >> ch;
+    switch (ch) {
+        case 1:
+            std::sort(studentai.begin(), studentai.end(), [](const Student& a, const Student& b) {
+                return a.vardas < b.vardas;
+            });
+            break;
+        case 2:
+            std::sort(studentai.begin(), studentai.end(), [](const Student& a, const Student& b) {
+                return a.pavarde < b.pavarde;
+            });
+            break;
+        case 3:
+            std::sort(studentai.begin(), studentai.end(), [](const Student& a, const Student& b) {
+                return (Vidurkis(a.namuDarbai) * 0.4 + a.egz * 0.6) < (Vidurkis(b.namuDarbai) * 0.4 + b.egz * 0.6);
+            });
+            break;
+        case 4:
+            std::sort(studentai.begin(), studentai.end(), [](const Student& a, const Student& b) {
+                return (apskaiciuotiMediana(a.namuDarbai) * 0.4 + a.egz * 0.6) < (apskaiciuotiMediana(b.namuDarbai) * 0.4 + b.egz * 0.6);
+            });
+            break;
+        default:
+            std::cout << "Neteisingas pasirinkimas\n";
+            return;
+    }
+    std::ofstream rf("rezultatai.txt");
+        
+        rf << std::fixed << std::setprecision(2);
+        rf << "-----------------------------------------------------------\n";
+        rf << std::setw(15) << "Vardas" << std::setw(15) << "Pavarde" << std::setw(25) << "Galutinis (vid.)  Galutinis (med.)\n";
+        rf << "-----------------------------------------------------------\n";
+        for (const auto& studentas : studentai) {
+            double galutinis_v = Vidurkis(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
+            double galutinis_m = apskaiciuotiMediana(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
+
+            rf << std::setw(15) << studentas.vardas 
+               << std::setw(15) << studentas.pavarde
+               << std::setw(15) << galutinis_v
+               << std::setw(15) << galutinis_m << "\n";
+        }
+}
 
 void Rez(std::vector<Student>& studentai, int& ch1) {
     while (ch1 != 5) {
@@ -281,27 +332,7 @@ void Rez(std::vector<Student>& studentai, int& ch1) {
                   << std::setw(15) << galutinis_v
                   << std::setw(15) << galutinis_m << "\n";
     }
-    std::cout << "Ar norite išsaugoti į failą? (T - taip, N - ne): ";
-    std::string ats;
-    std::cin >> ats;
-    if (ats == "T" || ats == "t") {
-        std::ofstream rf("rezultatai.txt");
-        
-        rf << std::fixed << std::setprecision(2);
-        rf << "-----------------------------------------------------------\n";
-        rf << std::setw(15) << "Vardas" << std::setw(15) << "Pavarde" << std::setw(25) << "Galutinis (vid.)  Galutinis (med.)\n";
-        rf << "-----------------------------------------------------------\n";
-        for (const auto& studentas : studentai) {
-            double galutinis_v = Vidurkis(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
-            double galutinis_m = apskaiciuotiMediana(studentas.namuDarbai) * 0.4 + studentas.egz * 0.6;
-
-            rf << std::setw(15) << studentas.vardas 
-               << std::setw(15) << studentas.pavarde
-               << std::setw(15) << galutinis_v
-               << std::setw(15) << galutinis_m << "\n";
-        }
-    }
-    }
     
+}
 }
 
